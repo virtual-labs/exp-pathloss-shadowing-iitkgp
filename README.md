@@ -7,7 +7,7 @@
 <b>Discipline | <b> Telecommunications Engineering 
 :--|:--|
 <b> Lab | <b> **Fading Channels and Mobile Communications Virtual Laboratory**
-<b> Experiment|     <b> **Understanding of Pathloss**
+<b> Experiment|     <b> **Pathloss with Shadowing**
 
 
 ### About the Experiment 
