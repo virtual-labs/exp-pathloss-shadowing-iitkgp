@@ -24,7 +24,7 @@ Step 1:-Click on the start button.A page appears with a dialogue box asking for 
     <img src="images/instruction3.png" alt="Large Scale Fading">  
       </div>
 
-      <div align="center">
+<div align="center">
     <img src="images/instruction4.png" alt="Large Scale Fading">  
       </div>
       
