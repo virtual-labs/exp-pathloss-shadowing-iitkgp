@@ -33,7 +33,7 @@ Step 1:-Click on the start button.A page appears with a dialogue box asking for 
 - Step 5:-Click on the button CHECK to verify whether your manually calculated value matches the computed value.
 
 <div align="center">
-    <img src="images/instruction4.png" alt="Large Scale Fading">  
+    <img src="images/instruction5.png" alt="Large Scale Fading">  
       </div>
       
 - Step 6:-If your calculated value matches with the computed value then a message appears stating that your entered values are correct.If your values are not correct then the exact values of the unknown parameters are displayed just next to the boxes where you have entered your calculated values of n and sigma.
@@ -41,7 +41,7 @@ Step 1:-Click on the start button.A page appears with a dialogue box asking for 
 - Step 7:-After,clicking on button CHECK you can also view a plot of received power(dBm) vs distance(m).
 
 <div align="center">
-    <img src="images/instruction5.png" alt="Large Scale Fading">  
+    <img src="images/instruction6.png" alt="Large Scale Fading">  
       </div>
       
 - Step 8:- If you want to perform the entire experiment once again click on the button RESET.
@@ -51,13 +51,13 @@ Step 1:-Click on the start button.A page appears with a dialogue box asking for 
 - Step 9:-Click on the button REPORT and then enter a file name to save your report.
 
 <div align="center">
-    <img src="images/instruction6.png" alt="Large Scale Fading">  
+    <img src="images/instruction7.png" alt="Large Scale Fading">  
       </div>
       
 - Step 10:-Finally, a message will appear that YOUR REPORT GENERATED SUCCESSFULLY.After view-ing the message click on the OK button.
 
 <div align="center">
-    <img src="images/instruction7.png" alt="Large Scale Fading">  
+    <img src="images/instruction8.png" alt="Large Scale Fading">  
       </div>
       
 - Step 11:-You can view the pdf report of the experiment you have done.
