@@ -1,39 +1,117 @@
-{
-  "version": 2.0,
+
+  {
+	  "version": 2.0,
   "questions": [
     {
-      "question": "This is a Sample Question 1?",
-      "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
-      },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
-      },
-      "correctAnswer": "a",
-      "difficulty": "beginner"
+    "question": "1. Large-scale propagation models, which include pathloss and shadowing, are used to predict what?",
+    "answers": {
+      "a": "The average signal strength over long distances.",
+      "b": "Instantaneous signal changes due to device movement.",
+      "c": "The data throughput of a wireless link.",
+      "d": "The battery life of a mobile device."
     },
-    {
-      "question": "This is a Sample Question 2?",
-      "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
-      },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
-      },
-      "correctAnswer": "c",
-      "difficulty": "beginner"
-    }
+    "correctAnswer": "a",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "2. What is the primary difference between large-scale fading and small-scale fading?",
+    "answers": {
+      "a": "Large-scale fading happens indoors; small-scale fading happens outdoors.",
+      "b": "Large-scale fading involves distance and obstructions; small-scale fading involves rapid fluctuations from multi-path.",
+      "c": "Large-scale fading only affects high frequencies; small-scale fading only affects low frequencies.",
+      "d": "There is no difference; they are two terms for the same effect."
+    },
+    "correctAnswer": "b",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "3. The pathloss exponent in a perfect free-space environment, with no obstructions or reflections, is exactly...?",
+    "answers": {
+      "a": "One",
+      "b": "Two",
+      "c": "Four",
+      "d": "Zero"
+    },
+    "correctAnswer": "b",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "4. When determining the pathloss exponent from measurements, what is the standard graphical method?",
+    "answers": {
+      "a": "Plotting received power versus distance on a linear scale and finding the curve.",
+      "b": "Finding the slope of the best-fit line on a plot of signal power (in dB) versus the logarithm of distance.",
+      "c": "Counting the number of buildings in the signal path.",
+      "d": "Measuring the transmitter's exact power output at the antenna."
+    },
+    "correctAnswer": "b",
+    "difficulty": "expert"
+  },
+  {
+    "question": "5. Shadow fading is considered a 'random' process because...?",
+    "answers": {
+      "a": "...the signal strength changes completely unpredictably from one second to the next.",
+      "b": "...it is impossible to know the transmitter's location.",
+      "c": "...the exact size, shape, and location of obstructions are complex and vary from one path to another.",
+      "d": "...it is caused by random noise from the sun."
+    },
+    "correctAnswer": "c",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "6. What would a shadow fading variance of zero practically imply?",
+    "answers": {
+      "a": "The signal is perfectly blocked at all times.",
+      "b": "All signal measurements at a given distance are exactly the same as the average predicted by the pathloss model.",
+      "c": "The environment is extremely cluttered and complex.",
+      "d": "The pathloss exponent must also be zero."
+    },
+    "correctAnswer": "b",
+    "difficulty": "expert"
+  },
+  {
+    "question": "7. To properly analyze the statistical characteristics of shadowing, what must be done to the raw signal measurements?",
+    "answers": {
+      "a": "The predictable signal loss due to distance (pathloss) must be subtracted out first.",
+      "b": "Only the strongest signal measurement should be kept for analysis.",
+      "c": "Only the weakest signal measurement should be kept for analysis.",
+      "d": "All measurements must be averaged into a single number for the entire area."
+    },
+    "correctAnswer": "a",
+    "difficulty": "expert"
+  },
+  {
+    "question": "8. What is a 'propagation model' in the context of wireless communications?",
+    "answers": {
+      "a": "A physical antenna used to send signals.",
+      "b": "A set of rules for how to speak on a mobile phone.",
+      "c": "A mathematical description used to characterize signal behavior from transmitter to receiver.",
+      "d": "A software program that blocks unwanted signals."
+    },
+    "correctAnswer": "c",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "9. A measured pathloss exponent of 2.5 suggests the environment is...?",
+    "answers": {
+      "a": "...identical to a vacuum (free space).",
+      "b": "...slightly more obstructed than free space, or includes some reflections.",
+      "c": "...a very dense city with many tall buildings.",
+      "d": "...an underground tunnel."
+    },
+    "correctAnswer": "b",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "10. Why is understanding shadow fading variance crucial for wireless network planning?",
+    "answers": {
+      "a": "It helps determine the exact data speed a single user will get at a specific moment.",
+      "b": "It is not crucial and is usually ignored in favor of pathloss.",
+      "c": "It helps predict the reliability of signal coverage, allowing planners to design for a certain percentage of users.",
+      "d": "It tells the network planner what brand of antenna to purchase."
+    },
+    "correctAnswer": "c",
+    "difficulty": "expert"
+  }
+
   ]
 }
