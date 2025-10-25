@@ -1,14 +1,7 @@
 ## Aim of experiment
 
-To understand the pathloss prediction formula.
+To understand the effect of shadowing on pathloss formula.
 
 ### Objective:
 
-
-1. Calculation of received signal strength as a function of distance of separation, antenna height and carrier frequency.
-2. To understand the impact of :-
-- Transmitter Power,
-- Pathloss exponent,
-- Carrier frequency,
-- Receiver antenna height,
-- Transmitter antenna height.
+To calculate pathloss exponent and variance of shadow fading from measurements and hence find the large scale propagation's statistical characteristics.
