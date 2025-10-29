@@ -1,727 +1,741 @@
 <!DOCTYPE html>
-<html lang="en"><!--html tag start-->
+<html lang="en">
 <head>
-  <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Pathloss with Shadowing Simulation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     
-    <title>PMOS Capacitor Band Diagram</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome and jQuery UI CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui/1.12.1/themes/base/jquery-ui.css">   
-    <link rel="stylesheet" href="adik.css"> 
-    
-    <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    
-    <!-- Bootstrap Bundle JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- MathJax for mathematical typesetting -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML"></script>
-    
-    <!-- Additional Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.2.1/math.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Knob/1.2.13/jquery.knob.min.js"></script>
-    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-   
-    <script src="./js/jquery.flot.min.js"></script>
-
-
-
-
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f9;
-        color: #333;
-        margin: 0;
-        padding: 20px;
-      }
-      .form-container {
-        max-width: 1100px;
-        margin: 0 auto;
-        background: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
-      
-      td {
-        padding: 10px;
-        text-align: right;
-      }
-      td:nth-child(2n) {
-        text-align: left;
-        padding-left: 5px;
-      }
-      input[type="text"] {
-        width: 100px;
-        padding: 5px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-      }
-      input[type="button"] {
-        padding: 8px 12px;
-        margin: 5px;
-        border: none;
-        border-radius: 4px;
-        background-color: #007bff;
-        color: white;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-      }
-      input[type="button"]:hover {
-        background-color: #0056b3;
-      }
-      .button-group {
-        text-align: center;
-        margin-top: 20px;
-      }
-      .button-group input[type="button"] {
-        margin: 5px;
-      }
-      .material-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-top: 20px;
-      }
-      .material-buttons input[type="button"] {
-        background-color: #28a745;
-      }
-      .material-buttons input[type="button"]:hover {
-        background-color: #218838;
-      }
-      .voltage-control {
-        text-align: center;
-        margin-top: 20px;
-      }
-      .voltage-control input[type="button"] {
-        background-color: #dc3545;
-      }
-      .voltage-control input[type="button"]:hover {
-        background-color: #c82333;
-      }
+        body { font-family: 'Inter', sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 20px; }
+        .container { background-color: #ffffff; border-radius: 1rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); overflow: hidden; width: 100%; max-width: 1200px; display: flex; flex-direction: column; }
+        .header { background-color: #007bff; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .nav-link { padding: 0.5rem 1rem; border-radius: 0.5rem; transition: background-color: 0.3s ease; }
+        .nav-link:hover { background-color: rgba(255, 255, 255, 0.2); }
+        .main-content { display: flex; flex-direction: column; padding: 1rem; gap: 1rem; }
+        @media (min-width: 768px) { .main-content { flex-direction: row; } }
+        .left-panel, .middle-panel, .bottom-panel { background-color: #e0f7fa; border-radius: 0.75rem; padding: 1rem; box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05); }
+        .left-panel { flex: 0 0 250px; min-width: 200px; }
+        .middle-panel { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .bottom-panel { flex-basis: 100%; margin-top: 1rem; display: flex; flex-direction: column; gap: 1rem; }
+        .input-group { margin-bottom: 0.75rem; }
+        .input-group label { display: block; margin-bottom: 0.25rem; font-weight: 500; color: #2c3e50; }
+        .input-group input[type="number"], .input-group select { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.5rem; background-color: #ffffff; }
+        .input-group input:disabled, .input-group select:disabled, .slider-group input:disabled { background-color: #e9ecef; cursor: not-allowed; opacity: 0.7; }
+        .slider-group { margin-top: 1rem; }
+        .slider-group input[type="range"] { width: 100%; }
+        .btn { background-color: #007bff; color: white; padding: 0.75rem 1.5rem; border-radius: 0.75rem; cursor: pointer; transition: background-color 0.3s ease, transform 0.1s ease; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); border: none; }
+        .btn:hover { background-color: #0056b3; transform: translateY(-2px); }
+        .btn:active { transform: translateY(0); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
+        .btn:disabled { background-color: #6c757d; cursor: not-allowed; transform: none; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background-color: #ffffff; padding: 2rem; border-radius: 1rem; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); text-align: center; max-width: 400px; width: 90%; }
+        .simulation-area { width: 100%; height: 450px; background-color: #a7d9f2; border-radius: 0.75rem; position: relative; overflow: hidden; margin-bottom: 1rem; transition: background-image 0.5s ease-in-out; }
+        .base-station { position: absolute; bottom: 0; left: 5%; width: 80px; height: 180px; background-image: url('tower.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center bottom; z-index: 10; transition: height 0.3s ease-out; }
+        .signal-waves { position: absolute; top: 9%; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; z-index: 11; }
+        .signal-wave-circle { position: absolute; top: 50%; left: 50%; box-sizing: border-box; border: 2px solid #27ae60; border-radius: 50%; opacity: 0; animation: pulse 2.5s infinite ease-out; }
+        @keyframes pulse { 0% { transform: translate(-50%, -50%) scale(0.1); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(15); opacity: 0; } }
+        .mobile-device { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); width: 50px; height: 80px; background-image: url('mobile.png'); background-size: contain; background-repeat: no-repeat; background-position: center; cursor: grab; z-index: 20; }
+        .mobile-device.dragging { cursor: grabbing; }
+        .simulation-info { position: absolute; top: 10px; right: 10px; background-color: rgba(255, 255, 255, 0.8); padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.9rem; color: #333; z-index: 30; }
+        .simulation-controls { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
+        .readings-table { width: 100%; border-collapse: collapse; margin-top: 1rem; background-color: #ffffff; border-radius: 0.75rem; overflow: hidden; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+        .readings-table th, .readings-table td { border: 1px solid #ddd; padding: 0.5rem; text-align: center; font-size: 0.85rem; }
+        .readings-table th { background-color: #f2f2f2; font-weight: 600; }
+        .graph-area { margin-top: 1rem; background-color: #ffffff; border-radius: 0.75rem; padding: 1rem; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+        canvas { display: block; width: 100%; height: 300px; border-radius: 0.5rem; }
 
+        /* --- Styles for the hidden PDF report template --- */
+        #report-container {
+            display: none; 
+            position: absolute;
+            left: -9999px; 
+            width: 8.5in;
+            height: 11in;
+            padding: 0.5in;
+            background: #fff;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            color: #000;
+        }
+        .report-header { font-size: 11pt; }
+        .report-header h1 { font-size: 12pt; font-weight: bold; margin: 0; }
+        .report-header p { margin: 2px 0; }
+        .report-datetime { font-size: 10pt; margin-top: 10px; }
+        .report-title { text-align: left; margin: 20px 0; }
+        .report-title h2 { color: #0000FF; font-size: 14pt; font-weight: bold; margin: 0; }
+        .report-title p { font-size: 11pt; margin: 4px 0 0 0; }
+        .report-body { display: flex; flex-direction: row; justify-content: space-between; align-items: flex-start; margin-top: 10px; border-top: 2px solid #000; padding-top: 10px; }
+        .report-left-col { width: 38%; }
+        .report-right-col { width: 60%; }
+        .report-data-table { border-collapse: collapse; width: 100%; border: 2px solid #000; }
+        .report-data-table th { background-color: #92D050; color: #000; font-weight: bold; font-size: 11pt; padding: 5px; border: 1px solid #000; text-align: center; }
+        .report-data-table td { border: 1px solid #000; padding: 3px 5px; font-size: 9pt; text-align: right; }
+        .report-data-table .header-row td { background-color: #F0F0F0; font-weight: bold; text-align: center; }
+        .report-results-table { border-collapse: collapse; width: 100%; border: 2px solid #000; margin-top: 10px; }
+        .report-results-table td { border: 1px solid #000; padding: 4px 5px; font-size: 10pt; }
+        .report-results-table .highlight { background-color: #FFFF99; } 
+        
+        .report-graph-section { 
+            width: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        }
+        .report-graph-title {
+            font-size: 12pt;
+            font-weight: bold;
+            margin-bottom: 5px; 
+            text-align: center;
+        }
+        .report-graph { 
+            width: 100%; 
+            border: 1px solid #ccc; 
+            margin-bottom: 15px; 
+        }
+        .report-discussion { 
+            font-size: 11pt;
+            width: 100%; 
+        }
+        .report-discussion strong {
+            color: #0000FF; 
+        }
 
-      .table-container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    td {
-      padding: 10px;
-      text-align: left;
-    }
-    td p {
-      margin: 0;
-      display: flex;
-      align-items: center;
-    }
-    td span {
-      margin-left: 5px;
-    }
-    .math {
-      font-family: "Times New Roman", serif;
-      font-style: italic;
-    }
-    .flex-container {
-      display: flex;
-      align-items: center;
-    }
-    .center-text {
-      text-align: center;
-      font-weight: bold;
-      margin: 20px 0;
-    }
-    .value {
-      font-weight: bold;
-      color: #007bff;
-    }
+        .report-footer { position: absolute; bottom: 0.5in; width: 7.5in; }
+        .report-signatures { display: flex; justify-content: space-between; font-size: 11pt; margin-top: 40px; }
+        .report-sig-line { border-top: 1px solid #000; padding-top: 4px; width: 40%; }
+        /* --- End of PDF Styles --- */
     </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center p-4">
 
-  </head>
-<body><!--body tag start-->
-    
-    
-   
-	
-    <div class="container p-3 my-5 text-left border"><!--3rd Container under body tag start-->
-      <div class="row"><!--First row under 3rd container start-->
-        <div class="col-md-1"></div><!--First col under 3rd container start& end-->
-        <div class="col-md-10"><!--2nd col under 3rd container start-->
-            <p class="text-center bg-success"> <a class="nav-link" data-bs-toggle="tab"  id="instcontrol" style="background-color:#128BD9"  ><span class=" h3 text-dark"> Instructions </span></a>
-              <div id="inst" style="display:block;height:200px;overflow-y:auto;text-align:justify">
-					
-					<!-- INSRTUCTION START -->
-          <ol>
-    
-            <h4>Input Parameters</h4>
-            <ul>
-              <li><strong>ϕm, ϕs (Work Function of the Metal and Semiconductor):</strong> Enter the values in electron volts (eV).</li>
-              <li><strong>χ (Electron Affinity):</strong> Enter the electron affinity in eV.</li>
-              <li><strong>tox, tox2 (Oxide Thickness):</strong> Enter the oxide thickness in nanometers (nm).</li>
-              <li><strong>εox, εox2 (Dielectric Constants of the Oxides):</strong> Enter the dielectric constants.</li>
-              <li><strong>Eg (Bandgap Energy):</strong> Enter the bandgap energy using the provided formula if needed.</li>
-              <li><strong>Nd (Donor Concentration)</strong> and <strong>Na (Acceptor Concentration):</strong> Enter the concentration values in cm³.</li>
-              <li><strong>T (Temperature):</strong> Enter the operating temperature in Kelvin (K).</li>
-              <li><strong>εsemi (Semiconductor Dielectric Constant):</strong> Enter the value.</li>
-              <li><strong>V (Voltage):</strong> Input the voltage applied across the device.</li>
-              <li><strong>Material Selection (Si, Ge, GaAs):</strong> Choose the material of the semiconductor.</li>
-            </ul>
-  
-            <h4>Submit</h4>
-            <p>Once all parameters are entered, click the <strong>Submit</strong> button to run the simulation.</p>
-  
-            <h4>View Results</h4>
-            <ul>
-              <li><strong>Band Diagram:</strong> Observe the energy levels within the semiconductor, including the conduction band edge, valence band edge, and Fermi level.</li>
-              
-            </ul>
-  
-            <h4>Explore Different Regions</h4>
-            <p>Use the <strong>Accumulation</strong>, <strong>Flatband</strong>, <strong>Depletion</strong>, <strong>Threshold</strong>, and <strong>Inversion</strong> buttons to explore different operational regions of the PMOS transistor.</p>
-  
-            <h4>Additional Notes</h4>
-            <ul>
-              <li>The right side of the screen displays calculated parameters such as the built-in potential (ϕs), maximum depletion width (xP), surface potential (ψs), and threshold voltage (VT).</li>
-              <li>The calculated charge (Q) and electric field (Eox) in the oxide layer are also shown.</li>
-              <li>Make sure to adjust and explore the parameters to see how they affect the band diagram, charge density, and electric field.</li>
-            </ul>
-     
-    </ol>
-				<!-- INSTRUCTION STOP -->	
-					
-		   </div>
-            </p> 
-          </div><!--2nd col under 3rd container end-->
-		  
-        <div class="col-md-1"></div><!--3rd col under 3rd container start& end-->
-      </div><!--First row under 3rd container end-->
-    </div><!--3rd Container under body tag end-->
-	
-   <!--simulation start -->
-   <div>
-    <body style="background-color:white" onload="moscap();"><div id="MathJax_Message" style="display: none;"></div>
+    <div class="container">
+        <header class="header">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                    
+                </div>
+                <h1 class="text-xl font-bold">Path Loss and Shadowing</h1>
+            </div>
+            
+        </header>
 
+        <div id="start-screen" class="p-8 flex flex-col items-center justify-center min-h-[400px]">
+            <button id="start-button" class="btn bg-blue-500 hover:bg-blue-600 text-white text-xl px-8 py-4 rounded-xl shadow-lg">Start</button>
+        </div>
 
-<style>
-h3 {margin-left:1cm}
-</style>
+        <div id="experiment-interface" class="main-content hidden">
+            <div class="left-panel">
+                <h2 class="text-lg font-bold mb-4 text-blue-800">Experiment Parameters</h2>
+                <div class="input-group"><label for="gt">Gt (dBi):</label><input type="number" id="gt" value="1" min="0" step="0.1"></div>
+                <div class="input-group"><label for="gr">Gr (dBi):</label><input type="number" id="gr" value="1" min="0" step="0.1"></div>
+                <div class="input-group"><label for="fc">fc (GHz):</label><input type="number" id="fc" value="1" min="0.1" step="0.1"></div>
+                <div class="input-group"><label for="tx-power">Tx Power (dBm):</label><input type="number" id="tx-power" value="50"></div>
+                <div class="input-group"><label for="environment">Environment:</label><select id="environment"><option value="urban-micro">Urban Micro</option><option value="urban-macro">Urban Macro</option><option value="rural">Rural</option></select></div>
+                <div class="input-group"><label for="calculation-mode">Calculation Mode:</label><select id="calculation-mode"><option value="with-shadowing">Path Loss with Shadowing</option><option value="only-pathloss">Only Path Loss</option></select></div>
+                <div class="slider-group mt-4"><label for="antenna-height">Antenna Height (m): <span id="antenna-height-value">10</span></label><input type="range" id="antenna-height" min="1" max="50" value="10"></div>
+                
+                <div class="flex flex-col gap-2 mt-6">
+                    <button id="reset-button" class="btn bg-red-500 hover:bg-red-600">Reset</button>
+                    <button id="generate-graph-button" class="btn bg-indigo-500 hover:bg-indigo-600" disabled>Generate Graph</button>
+                    <button id="report-button" class="btn bg-green-500 hover:bg-green-600" disabled>Report</button>
+                </div>
 
-<script type="text/x-mathjax-config;executed=true">
-  MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
-    jax: ["input/TeX","output/HTML-CSS"],
-    tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
-  });
-</script>
+                <h3 class="text-md font-bold mt-6 mb-2 text-blue-800">Calculate n and Sigma</h3>
+                <div class="input-group"><label for="np-input">Enter n:</label><input type="number" id="np-input" placeholder="Enter n"></div>
+                <div class="input-group"><label for="sigma-input">Enter Sigma:</label><input type="number" id="sigma-input" placeholder="Enter Sigma"></div>
+                
+                <div class="flex gap-2 mt-2">
+                    <button id="check-button" class="btn bg-purple-500 hover:bg-purple-600 flex-grow" disabled>Check</button>
+                    <button id="submit-button" class="btn bg-teal-500 hover:bg-teal-600 flex-grow" disabled>Submit</button>
+                </div>
+                <div id="check-result" class="mt-2 text-sm font-semibold"></div>
+            </div>
 
-
-<script language="JavaScript">
-
-var Ev = [];  //valence band energy
-// d arrays used for plotting
-var d1 = [];  //Ev
-var d2 = [];  //EF
-var d3 = [];  //Ec
-var d4 = [];  //n
-var d5 = [];  //p
-var d6 = [];  //rho
-var d7 = [];  //Electric field
-
-echarge = 1.60217733E-19;
-kb = 1.380658E-23/echarge;  //eV/K
-
-function moscap() { 
- tox = eval(data.tox.value)*1E-9;
- na = 1E6*eval(data.na.value);
- Va = eval(data.V.value); //applied voltage
- if (Math.abs(Va)<1E-10) {V = 0; data.V.value=0;}
- Nv = 1E6*eval(data.Nv.value);
- Nc = 1E6*eval(data.Nc.value);
- T = eval(data.T.value);
- Eg = eval(data.Eg.value);
- phi_m = eval(data.phi_m.value);
- chi_s = eval(data.chi_s.value);
- document.getElementById('Eg_txt').innerHTML=Eg.toPrecision(3);
- eps = 8.854187817E-12*eval(data.eps.value);
- eps_ox = 8.854187817E-12*eval(data.eps_ox.value);
- ni=Math.sqrt(Nc*Nv*Math.pow(T/300,3))*Math.exp(1.6022E-19*(-Eg)/(2*1.380658E-23*T));
- document.getElementById('ni_txt').innerHTML=(ni/1E6).toPrecision(3);
- Ev0 = kb*T*Math.log(na/Nv); //Ev - EF  far from the oxide
- Ec0 = kb*T*Math.log(ni*ni/(Nc*na)); //EF - Ec far from the oxide
- phi_s = chi_s + Eg + Ev0; // work function of semiconductor 
- document.getElementById('phi_s_txt').innerHTML=(phi_s).toPrecision(3);
- Vfb = phi_m  - phi_s; // flat band voltage
- document.getElementById('Vfb_txt').innerHTML=(Vfb).toPrecision(3);
- VT = 2*tox*Math.sqrt(eps*na*1.380658E-23*T*Math.log(na/ni))/eps_ox+2*kb*T*Math.log(na/ni);  //threshold voltage in depletion approximation
- document.getElementById('VT_txt').innerHTML=(VT+Vfb).toPrecision(3);
- xp = 2*Math.sqrt(eps*kb*T*Math.log(na/ni)/(echarge*na)); // maximum depletion width in depletion approximation
- document.getElementById('xp_txt').innerHTML=(1E6*xp).toPrecision(3);
- cox= eps_ox/tox;
- V = Va - phi_m + phi_s; //zero bias should result in a built-in voltage corresponding to the work function difference
- Es0 = -tox*echarge*na/eps_ox + echarge*na*Math.sqrt(tox*tox/(eps_ox*eps_ox) + 2*(Va - Vfb)/(echarge*na*eps)); //Es from the depletion approximation
- document.getElementById('Es0_txt').innerHTML=Es0.toPrecision(3);
- VIB0 = eps*Es0*Es0/(2*echarge*na);  //V_IB from the depletion approximation
- document.getElementById('VIB0_txt').innerHTML=VIB0.toPrecision(3);
-
-
-/* This section starts with somewhat arbitray initial conditions for Ev(x) and its derivative
-   dEv(x)/dx inside the bulk of the semiconductor and then integrates the Possion equation
-   to the left to calculate the voltage at the semiconductor/oxide interface and then the 
-   voltage at the gate. The calculated voltage at the gate is compared to the desired voltage at the gate 
-   the initial conditions are adjusted to get the calculated value closer to the desired value.
-*/
-  xr = 3.6*xp;   //right position for binary search
-  xm = 1.8*xp; //middle position for binary search
-  xl = 0;      //left position for binary search
-  for (j=0; j<16; j++) {
-    Ev = Ev0;
-    dEvdx = 0;
-    if (V>0) {dEvdx = 1e3; } 
-    if (V<0) {dEvdx = -1e3; } 
-    dx = xm/300;
-    for (i=0; i<301; i++) { //numerical integration using the midpoint method
-      x = xm*(1-i/300);
-      Ev_mid = Ev - dEvdx*dx/2;  //Ev at the midpoint
-      rho_mid = -na - Nc*Math.exp(-(Eg+Ev_mid)/(kb*T)) + Nv*Math.exp(Ev_mid/(kb*T));
-      dEvdx_mid = dEvdx - echarge*rho_mid*0.5*dx/eps;
-      Ev = Ev - dEvdx_mid*dx;
-      dEvdx = dEvdx - echarge*rho_mid*dx/eps;
-    }
-    Vs = Ev0 - Ev;
-    Es = dEvdx;
-    Eox = Es*eps/eps_ox;
-    Vtmp = Vs + Eox*tox;
-
-//binary search
-    if (V<0) {  
-      if (Vtmp > V) {xl = xm; xm = (xr + xl)/2; }
-      if (Vtmp < V) {xr = xm; xm = (xr + xl)/2; } 
-    }
-    else {
-      if (Vtmp < V) {xl = xm; xm = (xr + xl)/2; }
-      if (Vtmp > V) {xr = xm; xm = (xr + xl)/2; } 
-    }
-
-  } // end j
-
-/* This section solves the Possion equation one more time using the optimized initial conditions
-   and saves the data in arrays so it can be plotted.
-*/
-    Ev = Ev0;
-    dEvdx = 0;
-    if (V>0) {dEvdx = 1e3; } 
-    if (V<0) {dEvdx = -1e3; } 
-    dx = xm/300;
-    for (i=0; i<301; i++) { //numerical integration using the midpoint method
-      x = xm*(1-i/300);
-      Ev_mid = Ev - dEvdx*dx/2;  //Ev at the midpoint
-      rho_mid = -na - Nc*Math.exp(-(Eg+Ev_mid)/(kb*T)) + Nv*Math.exp(Ev_mid/(kb*T));
-      dEvdx_mid = dEvdx - echarge*rho_mid*0.5*dx/eps;
-      Ev = Ev - dEvdx_mid*dx;
-      dEvdx = dEvdx - echarge*rho_mid*dx/eps;
-
-      d1[i] = [1E6*x,Ev];
-      d3[i] = [1E6*x,Ev+Eg];
-      n = Nc*Math.exp(-(Eg+Ev)/(kb*T))/1E21;
-      p = Nv*Math.exp(Ev/(kb*T))/1E21
-      d4[i] = [1E6*x,n];
-      d5[i] = [1E6*x,p];
-      d6[i] = [1E6*x,p-n-na/1E21];
-      d7[i] = [1E6*x,dEvdx*1E-6];
-    }
-    d4[301] = [0,0]; d4[302] = [-1E6*(0.25*xp+tox),0];
-    d5[301] = [0,0]; d5[302] = [-1E6*(0.25*xp+tox),0];
-    d6[301] = [0,0]; d6[302] = [-1E6*tox,0]; d6[303] = [-1E6*tox,-d6[300][1]];  d6[304] = [-1E6*(tox-xm/100),-0.92*d6[300][1]]; 
-    d6[305] = [-1E6*(tox+xm/100),-0.92*d6[300][1]]; d6[306] = [-1E6*tox,-d6[300][1]]; d6[307] = [-1E6*tox,0]; d6[308] = [-1E6*(0.25*xp+tox),0];
-    d2[0] = [1E6*xm,0];
-    d2[1] = [0,0];
-    VIB = Ev0 - Ev;
-    Es = dEvdx;
-    Eox = Es*eps/eps_ox;
-    Q = -Es*eps; //the charge on the semiconductor
-    d7[301] = [0,Eox*1E-6]; d7[302]=[-tox*1E6,Eox*1E-6];  d7[303] = [-tox*1E6,0]; d7[304] = [-1E6*(0.25*xp+tox),0];
-    Vtmp = VIB + Eox*tox;
-    d2[3] = null;
-    d2[4] = [-1E6*tox,-Va];
-    d2[5] = [-1E6*(0.25*xp+tox),-Va];
-    d3[301] = [0,d3[300][1]+1];
-    d3[302] = [-1E6*tox,d3[300][1]+1- Eox*tox];
-    d3[303] = [-1E6*tox,-Vtmp];
-    d1[301] = [0,d1[300][1]-1];
-    d1[302] = [-1E6*tox,d1[300][1]-1- Eox*tox];
-    d1[303] = [-1E6*tox,-Vtmp];
-    if (V==0) { //
-      d1[0] = [1E6*xp,Ev0]; d2[0] = [1E6*xp,0]; d3[0] = [1E6*xp,Ev0+Eg];
-      d4[0] = [1E6*xp,0]; d5[0] = [1E6*xp,na/1E21]; d6[0] = [1E6*xp,0]; 
-      d7.length = 0;
-      d7[0] = [1E6*xp,0]; d7[1] = [-1E6*(0.25*xp+tox),0];
-    }
-
-  document.getElementById('Vs_txt').innerHTML=(VIB).toPrecision(3);
-  document.getElementById('Vtmp_txt').innerHTML=(Vtmp + phi_m - phi_s).toPrecision(3);
-  document.getElementById('Q_txt').innerHTML=(Q).toPrecision(3);
-  document.getElementById('n0_txt').innerHTML=(d4[300][1]).toPrecision(3);
-  document.getElementById('Eox_txt').innerHTML=(Eox).toPrecision(3); 
-  document.getElementById('Es_txt').innerHTML=(Es).toPrecision(3); 
-
-//plot bands
-     // Define data for the plot
-     var data1 = [ 
-    { data: d3, color: "rgb(255,0,0)", shadowSize: 0, lines: { show: true, lineWidth: 2 }, points: { show: true, radius: 3, fill: true, fillColor: "rgb(255,0,0)" }, label: "E<sub>c</sub>" },
-    { data: d1, color: "rgb(0,255,255)", shadowSize: 0, lines: { show: true, lineWidth: 2 }, points: { show: true, radius: 3, fill: true, fillColor: "rgb(0,255,255)" }, label: "E<sub>v</sub>" },
-    { data: d2, color: "rgb(255,165,0)", shadowSize: 0, lines: { show: true, lineWidth: 2 }, points: { show: true, radius: 3, fill: true, fillColor: "rgb(255,165,0)" }, label: "E<sub>F</sub>" }
-];
-
-// Plot the graph
-var plot = $.plot($("#placeholder1"), data1, {
-    grid: { hoverable: true, clickable: true },
-    xaxis: { axisLabel: "Voltage (V)" },
-    yaxis: { axisLabel: "Energy Levels" }
-});
-
-$("#placeholder1").bind("plothover", function (event, pos, item) {
-    if (item) {
-        $("#tooltip").html(item.series.label + "<br>V: " + item.datapoint[0].toFixed(2) + " V<br>E: " + item.datapoint[1].toFixed(2))
-            .css({ top: item.pageY + 5, left: item.pageX + 5 })
-            .fadeIn(200);
-    } else {
-        $("#tooltip").hide();
-    }
-});
-
-$(document).ready(function () {
-    $("body").append("<div id='tooltip' style='position: absolute; display: none; border: 1px solid #ccc; background: #fff; padding: 5px; font-size: 12px;'></div>");
-});
-
-
-
-
-
-
-MathJax.Hub.Queue(['Typeset',MathJax.Hub]);  //have Mathjax process the plot legends that were redrawn
-}
-
-</script>
-
-
-<style>
-p {margin-left:1cm; margin-right:1cm;}
-p.t {margin-left:0cm; margin-right:0cm;}
-h2 {margin-left:1cm;}
-</style>
-
-  
-  
-
-
-<div class="form-container">
-  <form name="data">
-    <table>
-      <tr>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>ϕ</mi><mi>m</mi></msub></math> =</td>
-        <td><input type="text" name="phi_m" size="10" value="4.08" spellcheck="false"></td>
-        <td>eV</td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>χ</mi><mi>s</mi></msub></math> =</td>
-        <td><input type="text" name="chi_s" size="10" value="4.05" spellcheck="false"></td>
-        <td>eV</td>
-      </tr>
-      <tr>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>t</mi><mrow><mi>o</mi><mi>x</mi></mrow></msub></math> =</td>
-        <td><input type="text" name="tox" size="10" value="3" spellcheck="false"></td>
-        <td>nm</td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>ϵ</mi><mrow><mi>o</mi><mi>x</mi></mrow></msub></math> =</td>
-        <td><input type="text" name="eps_ox" size="10" value="4" spellcheck="false"></td>
-        <td></td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>N</mi><mi>c</mi></msub><mo>(</mo><mn>300</mn><mo>)</mo></math> =</td>
-        <td><input type="text" name="Nc" size="10" value="2.78E19" spellcheck="false"></td>
-        <td>1/cm³</td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>T</mi></math> =</td>
-        <td><input type="text" name="T" size="10" value="300" spellcheck="false"></td>
-        <td>K</td>
-      </tr>
-      <tr>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>E</mi><mi>g</mi></msub></math> =</td>
-        <td><input type="text" name="Eg" size="25" value="1.166-4.73E-4*T*T/(T+636)" spellcheck="false"></td>
-        <td>eV</td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>ϵ</mi><mrow><mi>s</mi><mi>e</mi><mi>m</mi><mi>i</mi></mrow></msub></math> =</td>
-        <td><input type="text" name="eps" size="10" value="12" spellcheck="false"></td>
-        <td></td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>N</mi><mi>v</mi></msub><mo>(</mo><mn>300</mn><mo>)</mo></math> =</td>
-        <td><input type="text" name="Nv" size="10" value="9.84E18" spellcheck="false"></td>
-        <td>1/cm³</td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>N</mi><mi>A</mi></msub></math> =</td>
-        <td><input type="text" name="na" size="10" value="1E17" spellcheck="false"></td>
-        <td>1/cm³</td>
-      </tr>
-    </table>
-
-    <div class="button-group">
-      <div class="voltage-control">
-        <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>V</mi></math> = 
-        <input type="text" name="V" size="10" value="0" spellcheck="false"> V 
-        <input type="button" value="-" onclick="data.V.value = (parseFloat(data.V.value) - 0.01).toFixed(2); moscap();">
-        <input type="button" value="+" onclick="data.V.value = (parseFloat(data.V.value) + 0.01).toFixed(2); moscap();">
-      </div>
-      <input type="button" value="Submit" onclick="moscap();">
-    </div>
-
-    <div class="material-buttons">
-      <input type="button" value=" Si " onclick="setMaterial('Si');">
-      <input type="button" value=" Ge " onclick="setMaterial('Ge');">
-      <input type="button" value="GaAs" onclick="setMaterial('GaAs');">
-    </div>
-
-    <div class="button-group">
-      <input type="button" value="Accumulation" onclick="setVoltage(Vfb - 0.2);">
-      <input type="button" value="Flatband" onclick="setVoltage(Vfb);">
-      <input type="button" value="Depletion" onclick="setVoltage(0.5 * (VT + 2 * Vfb));">
-      <input type="button" value="Threshold" onclick="setVoltage(VT + Vfb);">
-      <input type="button" value="Inversion" onclick="setVoltage(VT + Vfb + 0.2);">
-    </div>
-  </form>
-</div>
-
-<script>
-  function setMaterial(material) {
-    const materials = {
-      Si: {
-        Nc: '2.78E19',
-        Nv: '9.84E18',
-        chi_s: '4.05',
-        Eg: '1.166 - (4.73E-4 * T * T) / (T + 636)'
-      },
-      Ge: {
-        Nc: '1.04E19',
-        Nv: '6.0E18',
-        chi_s: '4.0',
-        Eg: '0.7437 - (4.77E-4 * T * T) / (T + 235)'
-      },
-      GaAs: {
-        Nc: '4.45E17',
-        Nv: '7.72E18',
-        chi_s: '4.07',
-        Eg: '1.519 - (5.41E-4 * T * T) / (T + 204)'
-      }
-    };
-
-    const { Nc, Nv, chi_s, Eg } = materials[material];
-    data.Nc.value = Nc;
-    data.Nv.value = Nv;
-    data.chi_s.value = chi_s;
-    data.Eg.value = Eg;
-    moscap();
-  }
-
-  function setVoltage(value) {
-    data.V.value = value;
-    moscap();
-  }
-</script>
-
-<table align="center"><tbody><tr><td>
-
-<p style="text-align:center"><b>Band diagram</b></p>
-
-<table align="center">
-    <tbody>
-        <tr>
-            <td>
-                <p style="text-align:center;">Energy<br>[eV]</p>
-            </td>
-            <td>
-                <div id="placeholder1" style="width: 400px; height: 300px; position: relative;">
-                    <canvas class="flot-base" width="400" height="300"></canvas>
-                    <canvas class="flot-overlay" width="400" height="300" style="position: absolute; left: 0; top: 0;"></canvas>
-                    <div class="flot-text" style="position: absolute; inset: 0; font-size: smaller; color: #545454;">
-                        <div class="flot-x-axis xAxis" style="position: absolute; inset: 0; display: block;">
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 62px; text-align: center;">0.00</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 138px; text-align: center;">0.05</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 214px; text-align: center;">0.10</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 290px; text-align: center;">0.15</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 366px; text-align: center;">0.20</div>
-                        </div>
-                        <div class="flot-y-axis yAxis" style="position: absolute; inset: 0; display: block;">
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 269px; left: 2px; text-align: right;">-2.5</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 235px; left: 2px; text-align: right;">-2.0</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 202px; left: 2px; text-align: right;">-1.5</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 168px; left: 2px; text-align: right;">-1.0</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 135px; left: 2px; text-align: right;">-0.5</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 101px; left: 6px; text-align: right;">0.0</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 67px; left: 6px; text-align: right;">0.5</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 34px; left: 6px; text-align: right;">1.0</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 0; left: 6px; text-align: right;">1.5</div>
+            <div class="flex flex-col flex-grow gap-4">
+                <div class="middle-panel">
+                    <div id="simulation-area" class="simulation-area">
+                        <div id="base-station" class="base-station"><div id="signal-waves" class="signal-waves"></div></div>
+                        <div id="mobile-device" class="mobile-device"></div>
+                        <div class="simulation-info">
+                            <p>Distance: <span id="current-distance">0.0</span> m</p>
+                            <p>Rx Power: <span id="current-rx-power">0.0</span> dBm</p>
+                            <p>Path Loss: <span id="current-path-loss">0.0</span> dB</p>
                         </div>
                     </div>
-                    <div class="legend" style="position: absolute; top: 13px; right: 19px; background-color: rgba(255, 255, 255, 0.85);">
-                        <table style="font-size: smaller; color: #545454;">
-                            <tbody>
-                                <tr>
-                                    <td class="legendColorBox" style="padding: 1px;">
-                                        <div style="border: 1px solid #ccc;">
-                                            <div style="width: 4px; height: 0; border: 5px solid rgb(255, 0, 0); overflow: hidden;"></div>
-                                        </div>
-                                    </td>
-                                    <td class="legendLabel">E<sub>c</sub></td>
-                                </tr>
-                                <tr>
-                                    <td class="legendColorBox" style="padding: 1px;">
-                                        <div style="border: 1px solid #ccc;">
-                                            <div style="width: 4px; height: 0; border: 5px solid rgb(0, 0, 255); overflow: hidden;"></div>
-                                        </div>
-                                    </td>
-                                    <td class="legendLabel">E<sub>v</sub></td>
-                                </tr>
-                                <tr>
-                                    <td class="legendColorBox" style="padding: 1px;">
-                                        <div style="border: 1px solid #ccc;">
-                                            <div style="width: 4px; height: 0; border: 5px solid rgb(0, 0, 0); overflow: hidden;"></div>
-                                        </div>
-                                    </td>
-                                    <td class="legendLabel">E<sub>F</sub></td>
-                                </tr>
+                    <div class="simulation-controls">
+                        <button id="move-minus-10m" class="btn bg-gray-500 hover:bg-gray-600">-10m</button>
+                        <button id="move-plus-10m" class="btn bg-gray-500 hover:bg-gray-600">+10m</button>
+                        <button id="take-reading-button" class="btn bg-blue-500 hover:bg-blue-600">Take Reading</button>
+                        <button id="finish-readings-button" class="btn bg-yellow-500 hover:bg-yellow-600" disabled>Finish</button>
+                    </div>
+                </div>
+                <div class="bottom-panel">
+                    <div class="overflow-x-auto">
+                        <table class="readings-table">
+                            <thead>
+                                <tr><th>#</th><script>for(let i=1;i<=20;i++){document.write(`<th>${i}</th>`)}</script></tr>
+                            </thead>
+                            <tbody id="readings-body">
+                                <tr><td>Distance (m)</td><script>for(let i=1;i<=20;i++){document.write(`<td id="dist-${i}">-</td>`)}</script></tr>
+                                <tr><td>Rx Power (dBm)</td><script>for(let i=1;i<=20;i++){document.write(`<td id="rx-power-${i}">-</td>`)}</script></tr>
+                                <tr><td>Path Loss (dB)</td><script>for(let i=1;i<=20;i++){document.write(`<td id="path-loss-${i}">-</td>`)}</script></tr>
                             </tbody>
                         </table>
                     </div>
+                    <div class="graph-area"><canvas id="power-distance-chart"></canvas></div>
                 </div>
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <p style="text-align:center;"><i>x</i> [μm]</p>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-
-</td><td>
-
-  <div class="table-container">
-    <table>
-      <tbody>
-        <tr>
-          <td>
-            <p>
-              <span class="math">E<sub>g</sub> =</span>
-              <span id="Eg_txt" class="value">1.12</span>&nbsp;eV
-            </p>
-          </td>
-          <td>
-            <p>
-              <span class="math">n<sub>i</sub> =</span>
-              <span id="ni_txt" class="value">6.40e+9</span>&nbsp;1/cm³
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>
-              <span class="math">E<sub>s</sub> =</span>
-              <span id="Es_txt" class="value">1.57e+7</span>&nbsp;V/m
-            </p>
-          </td>
-          <td>
-            <p>
-              <span class="math">V<sub>s</sub> =</span>
-              <span id="Vs_txt" class="value">0.831</span>&nbsp;V
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>
-              <span class="math">Q =</span>
-              <span id="Q_txt" class="value">-0.00167</span>&nbsp;C/m²
-            </p>
-          </td>
-          <td>
-            <p>
-              <span class="math">n(x=0) =</span>
-              <span id="n0_txt" class="value">37.2</span>&nbsp;×&nbsp;10<sup>15</sup>&nbsp;1/cm³
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>
-              <span class="math">E<sub>ox</sub> =</span>
-              <span id="Eox_txt" class="value">4.70e+7</span>&nbsp;V/m
-            </p>
-          </td>
-          <td>
-            <p>
-              <span class="math">V<sub>shoot</sub> =</span>
-              <span id="Vtmp_txt" class="value">0.0000221</span>&nbsp;V
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="flex-container">
-              <span class="math">$$\phi_s =$$</span>
-              <span id="phi_s_txt" class="value">5.05</span> eV
             </div>
-          </td>
-          <td>
-            <div class="flex-container">
-              <span class="math">$$V_{fb} = \phi_m - \phi_s =$$</span>
-              <span id="Vfb_txt" class="value">-0.972</span> V
+        </div>
+    </div>
+
+    <div id="name-modal" class="modal hidden"><div class="modal-content"><h3 class="text-xl font-bold mb-4">Input</h3><p>What is your name?</p><input type="text" id="user-name-input" placeholder="Your Name" class="w-full p-2 border rounded-lg mt-4"><div class="flex justify-center gap-4 mt-6"><button id="name-modal-cancel" class="btn bg-gray-500 hover:bg-gray-600">Cancel</button><button id="name-modal-ok" class="btn bg-blue-500 hover:bg-blue-600">OK</button></div></div></div>
+    <div id="custom-message-modal" class="modal hidden"><div class="modal-content"><h3 class="text-xl font-bold mb-4" id="custom-message-title">Message</h3><p id="custom-message-text"></p><div class="flex justify-center mt-6"><button id="custom-message-ok" class="btn bg-blue-500 hover:bg-blue-600">OK</button></div></div></div>
+    
+    <div id="report-success-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3 class="text-xl font-bold mb-4">Message</h3>
+            <p class="text-green-600 font-semibold">Your PDF report generated successfully!</p>
+            <div class="modal-buttons">
+                <button id="report-success-ok" class="btn bg-blue-500 hover:bg-blue-600">OK</button>
             </div>
-          </td>
-        </tr>
-        <tr><td colspan="2">&nbsp;</td></tr>
-        <tr><td colspan="2"><p class="center-text">From the depletion approximation:</p></td></tr>
-        <tr>
-          <td>
-            <p>
-              <span class="math">max (x<sub>p</sub>) =</span>
-              <span id="xp_txt" class="value">0.107</span>&nbsp;μm
-            </p>
-          </td>
-          <td>
-            <p>
-              <span class="math">V<sub>T</sub> =</span>
-              <span id="VT_txt" class="value">0.0292</span>&nbsp;V
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>
-              <span class="math">E<sub>s</sub> =</span>
-              <span id="Es0_txt" class="value">1.58e+7</span>&nbsp;V/m
-            </p>
-          </td>
-          <td>
-            <p>
-              <span class="math">V<sub>s</sub> =</span>
-              <span id="VIB0_txt" class="value">0.830</span>&nbsp;V
-            </p>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+        </div>
+    </div>
+    
+    <div id="report-container">
+        <div class="report-header">
+            <h1>Fading Channels & Mobile Communications</h1>
+            <p>IIT Kharagpur</p>
+        </div>
+        <div class="report-datetime">
+            <p>Date: <span id="pdf-date"></span></p>
+            <p>Time: <span id="pdf-time"></span></p>
+        </div>
+        <div class="report-title">
+            <h2>Exp 2: Understanding of Path Loss & Shadowing</h2>
+            <p>Name: <span id="pdf-name">User Name</span></p>
+        </div>
+        
+        <div class="report-body">
+            <div class="report-left-col">
+                <table class="report-data-table">
+                    <thead>
+                        <tr><th colspan="2" id="pdf-env-title">URBAN MACRO</th></tr>
+                        <tr class="header-row"><td>Pr(dBm)</td><td>Dist(m)</td></tr>
+                    </thead>
+                    <tbody id="pdf-data-table-body">
+                        </tbody>
+                </table>
+                <table class="report-results-table">
+                    <tbody>
+                        <tr><td></td><td>Entered</td><td>Actual Value</td></tr>
+                        <tr>
+                            <td>n:</td>
+                            <td id="pdf-n-entered"></td>
+                            <td id="pdf-n-actual"></td>
+                        </tr>
+                        <tr class="highlight">
+                            <td>sigma:</td>
+                            <td id="pdf-sigma-entered"></td>
+                            <td id="pdf-sigma-actual"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="report-right-col">
+                <div class="report-graph-section">
+                    <div class="report-graph-title">Power Recieved (dBm) vs. Distance (m)</div>
+                    <img id="pdf-graph-img" src="" alt="Power vs. Distance Graph" class="report-graph">
+                </div>
+                
+                <div class="report-discussion">
+                    <strong>DISCUSSION:</strong>
+                    <p>Additional discussion about experiment can be added here</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="report-footer">
+            <div class="report-signatures">
+                <div class="report-sig-line">(Signature of <span id="pdf-sig-name">User Name</span>)</div>
+                <div class="report-sig-line" style="text-align: right;">(Signature of Faculty)</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // --- DOM Elements ---
+        const startButton = document.getElementById('start-button'), experimentInterface = document.getElementById('experiment-interface'), nameModal = document.getElementById('name-modal');
+        const gtInput = document.getElementById('gt'), grInput = document.getElementById('gr'), fcInput = document.getElementById('fc'), txPowerInput = document.getElementById('tx-power');
+        const environmentSelect = document.getElementById('environment'), calculationModeSelect = document.getElementById('calculation-mode');
+        const antennaHeightSlider = document.getElementById('antenna-height'), antennaHeightValueSpan = document.getElementById('antenna-height-value');
+        const resetButton = document.getElementById('reset-button'), reportButton = document.getElementById('report-button');
+        const npInput = document.getElementById('np-input'), sigmaInput = document.getElementById('sigma-input');
+        
+        const checkButton = document.getElementById('check-button'), 
+              submitButton = document.getElementById('submit-button'), 
+              generateGraphButton = document.getElementById('generate-graph-button');
+              
+        const checkResultDiv = document.getElementById('check-result');
+        const mobileDevice = document.getElementById('mobile-device'), baseStation = document.getElementById('base-station'), simulationArea = document.getElementById('simulation-area');
+        const currentDistanceSpan = document.getElementById('current-distance'), currentRxPowerSpan = document.getElementById('current-rx-power'), currentPathLossSpan = document.getElementById('current-path-loss');
+        const takeReadingButton = document.getElementById('take-reading-button'), finishReadingsButton = document.getElementById('finish-readings-button');
+        const chartCanvas = document.getElementById('power-distance-chart');
+        const customMessageModal = document.getElementById('custom-message-modal'), customMessageTitle = document.getElementById('custom-message-title'), customMessageText = document.getElementById('custom-message-text');
+        const reportSuccessModal = document.getElementById('report-success-modal');
+        const reportSuccessOkButton = document.getElementById('report-success-ok');
 
-</td></tr></tbody></table>
+        // --- Global State ---
+        let chartInstance = null, readings = [], isGraphGenerated = false, userName = '';
+        let isDragging = false, currentMobileLeftPx = 0, currentMobileTopPx = 0;
+        const MAX_READINGS = 20, maxSimulatedDistance = 500, REFERENCE_DISTANCE_M = 1;
+        const ENVIRONMENT_PARAMS = { 'urban-micro': { n: 3.5, sigma: 6 }, 'urban-macro': { n: 3.7, sigma: 8 }, 'rural': { n: 2.2, sigma: 10 } };
+        
+        let calculated_n = null, calculated_sigma = null;
 
+        // --- Utility Functions ---
+        const showCustomMessage = (title, message) => { customMessageTitle.textContent = title; customMessageText.innerHTML = message; customMessageModal.classList.remove('hidden'); };
+        const hideCustomMessage = () => customMessageModal.classList.add('hidden');
+        const updateAntennaVisuals = (h) => { antennaHeightValueSpan.textContent = h; baseStation.style.height = `${120 + ((h - 1) / 49) * 130}px`; };
+        const initSignalAnimation = () => {
+            const c = document.getElementById('signal-waves'); if (!c) return; c.innerHTML = '';
+            for (let i = 0; i < 3; i++) { const w = document.createElement('div'); w.className = 'signal-wave-circle'; w.style.animationDelay = `${i * 0.6}s`; c.appendChild(w); }
+        };
+        const updateEnvironmentVisuals = (env) => {
+            const urls = { 'urban-macro': 'umac.png', 'urban-micro': 'm.jpg', 'rural': 'bg.png' };
+            simulationArea.style.backgroundImage = `url('${urls[env] || ''}')`;
+            simulationArea.style.backgroundSize = 'cover'; simulationArea.style.backgroundPosition = 'center';
+        };
+        const calculateDistance = () => Math.abs(((mobileDevice.offsetLeft + mobileDevice.offsetWidth / 2) - (simulationArea.offsetWidth * 0.05 + baseStation.offsetWidth / 2)) / (simulationArea.offsetWidth * 0.9) * maxSimulatedDistance);
+        const calculatePowerAndPathLoss = (dist, gt, gr, fc, txP, n, sig, addShadowing) => {
+            dist = Math.max(dist, REFERENCE_DISTANCE_M);
+            const pld0 = 20 * Math.log10(4 * Math.PI * REFERENCE_DISTANCE_M / (3e8 / (fc * 1e9)));
+            let pl = pld0 + (10 * n * Math.log10(dist / REFERENCE_DISTANCE_M));
+            if (addShadowing) { pl += (Math.sqrt(-2 * Math.log(Math.random())) * Math.cos(2 * Math.PI * Math.random())) * sig; }
+            return { rxPower: txP + gt + gr - pl, pathLoss: pl };
+        };
+        const updateSimulationInfo = () => {
+            const dist = calculateDistance();
+            const envParams = ENVIRONMENT_PARAMS[environmentSelect.value];
+            const { rxPower, pathLoss } = calculatePowerAndPathLoss(
+                dist, 
+                +gtInput.value, 
+                +grInput.value, 
+                +fcInput.value, 
+                +txPowerInput.value, 
+                envParams.n, 
+                envParams.sigma, 
+                true 
+            );
+            currentDistanceSpan.textContent = dist.toFixed(1); currentRxPowerSpan.textContent = rxPower.toFixed(1); currentPathLossSpan.textContent = pathLoss.toFixed(1);
+        };
+        const updateMobilePositionVisual = () => {
+            const area = simulationArea.getBoundingClientRect();
+            currentMobileLeftPx = Math.max(0, Math.min(currentMobileLeftPx, area.width - mobileDevice.offsetWidth));
+            currentMobileTopPx = Math.max(0, Math.min(currentMobileTopPx, area.height - mobileDevice.offsetHeight));
+            mobileDevice.style.left = `${currentMobileLeftPx}px`; mobileDevice.style.top = `${currentMobileTopPx}px`;
+            updateSimulationInfo();
+        };
+        
+        const plotChart = () => {
+            if (chartInstance) chartInstance.destroy();
+            const datasets = [];
+            
+            let d_max = maxSimulatedDistance;
+            if (readings.length > 0) {
+                d_max = Math.max(maxSimulatedDistance, ...readings.map(r => r.distance));
+                d_max = Math.ceil(d_max / 100) * 100; 
+            }
+            
+            const labels = [];
+            const step = Math.max(10, d_max / 100); 
+            for (let d = 0; d <= d_max; d += step) labels.push(d); 
+            
+            const envParams = ENVIRONMENT_PARAMS[environmentSelect.value];
 
+            const calculatedData = labels.map(d => {
+                return { x: d, y: calculatePowerAndPathLoss(d, +gtInput.value, +grInput.value, +fcInput.value, +txPowerInput.value, envParams.n, 0, false).rxPower };
+            });
+            datasets.push({ 
+                label: 'Calculated Power', 
+                data: calculatedData, 
+                borderColor: 'blue', 
+                backgroundColor: 'blue',
+                borderWidth: 2,
+                pointRadius: 4,
+                pointStyle: 'triangle',
+                showLine: true,
+                tension: 0.1
+            });
+            
+            if (isGraphGenerated && calculationModeSelect.value === 'with-shadowing') {
+                const upperSigmaBand = calculatedData.map(p => ({ x: p.x, y: p.y + envParams.sigma }));
+                datasets.push({ label: 'Shadowing Range (+σ)', data: upperSigmaBand, fill: '-1', backgroundColor: 'rgba(0, 0, 255, 0.1)', borderColor: 'transparent', pointRadius: 0 });
+                const lowerSigmaBand = calculatedData.map(p => ({ x: p.x, y: p.y - envParams.sigma }));
+                 datasets.push({ label: 'Shadowing Range (-σ)', data: lowerSigmaBand, fill: '-2', backgroundColor: 'rgba(0, 0, 255, 0.1)', borderColor: 'transparent', pointRadius: 0 });
+            }
 
-</div>
-   <!--simulation end -->
-  	 
-</body><!--body tag end-->
-</html><!--html tag end-->
+            if (readings.length > 0) {
+                datasets.push({ 
+                    label: 'Measured Power', 
+                    data: [...readings].sort((a, b) => a.distance - b.distance).map(r => ({ x: r.distance, y: r.rxPower })), 
+                    borderColor: 'red', 
+                    backgroundColor: 'red', 
+                    showLine: true, 
+                    pointRadius: 4,
+                    pointStyle: 'circle'
+                });
+            }
+            
+            if (isGraphGenerated && !isNaN(parseFloat(npInput.value))) {
+                const enteredNValue = parseFloat(npInput.value);
+                const enteredData = labels.map(d => {
+                     return { x: d, y: calculatePowerAndPathLoss(d, +gtInput.value, +grInput.value, +fcInput.value, +txPowerInput.value, enteredNValue, 0, false).rxPower };
+                });
+                datasets.push({ 
+                    label: 'Power Recieved(Entered Value)', 
+                    data: enteredData, 
+                    borderColor: 'black', 
+                    backgroundColor: 'black',
+                    borderWidth: 3, 
+                    pointRadius: 4, 
+                    pointStyle: 'rect',
+                    showLine: true,
+                    tension: 0.1 
+                });
+            }
+            
+            chartInstance = new Chart(chartCanvas.getContext('2d'), {
+                type: 'line',
+                data: { 
+                    datasets: datasets 
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    scales: { 
+                        x: { 
+                            type: 'linear', 
+                            title: { display: true, text: 'Distance (m)' },
+                            min: 0,
+                            max: d_max 
+                        }, 
+                        y: { 
+                            title: { display: true, text: 'Power Recieved (dBm)' } 
+                        } 
+                    }, 
+                    plugins: { 
+                        legend: { 
+                            labels: { 
+                                filter: item => !item.text.includes('Range'),
+                                usePointStyle: true 
+                            } 
+                        } 
+                    } 
+                }
+            });
+        };
+
+        const updateReadingsTable = () => {
+            for (let i = 1; i <= MAX_READINGS; i++) {
+                const r = readings[i - 1];
+                document.getElementById(`dist-${i}`).textContent = r ? r.distance.toFixed(1) : '-';
+                document.getElementById(`rx-power-${i}`).textContent = r ? r.rxPower.toFixed(1) : '-';
+                document.getElementById(`path-loss-${i}`).textContent = r ? r.pathLoss.toFixed(1) : '-';
+            }
+        };
+
+        const resetExperiment = () => {
+            isGraphGenerated = false; readings = [];
+            gtInput.value = 1; grInput.value = 1; fcInput.value = 1; txPowerInput.value = 50;
+            environmentSelect.value = 'urban-macro'; 
+            calculationModeSelect.value = 'with-shadowing';
+            antennaHeightSlider.value = 10; npInput.value = ''; sigmaInput.value = '';
+            checkResultDiv.textContent = ''; 
+            [gtInput, grInput, fcInput, txPowerInput, antennaHeightSlider, environmentSelect].forEach(input => input.disabled = false);
+            
+            takeReadingButton.disabled = false;
+            finishReadingsButton.disabled = true;
+            checkButton.disabled = true;     
+            submitButton.disabled = true; 
+            generateGraphButton.disabled = true;
+            reportButton.disabled = true;    
+            
+            calculated_n = null; 
+            calculated_sigma = null;
+            
+            updateAntennaVisuals(antennaHeightSlider.value); updateEnvironmentVisuals(environmentSelect.value);
+            currentMobileLeftPx = simulationArea.offsetWidth / 2 - mobileDevice.offsetWidth / 2;
+            currentMobileTopPx = simulationArea.offsetHeight - mobileDevice.offsetHeight - 10;
+            updateMobilePositionVisual(); updateReadingsTable(); 
+            if (chartInstance) chartInstance.destroy();
+            chartInstance = new Chart(chartCanvas.getContext('2d'), {
+                type: 'line', data: { labels: [], datasets: [] },
+                options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'linear', title: { display: true, text: 'Distance (m)' } }, y: { title: { display: true, text: 'Rx Power (dBm)' } } } }
+            });
+        };
+
+        // --- Event Listeners ---
+        document.getElementById('start-button').addEventListener('click', () => nameModal.classList.remove('hidden'));
+        document.getElementById('name-modal-ok').addEventListener('click', () => {
+            userName = document.getElementById('user-name-input').value.trim();
+            if (userName) {
+                nameModal.classList.add('hidden'); document.getElementById('start-screen').classList.add('hidden'); experimentInterface.classList.remove('hidden');
+                const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+                s.onload = () => { resetExperiment(); initSignalAnimation(); }; document.head.appendChild(s);
+            }
+        });
+        document.getElementById('name-modal-cancel').addEventListener('click', () => nameModal.classList.add('hidden'));
+        document.getElementById('custom-message-ok').addEventListener('click', hideCustomMessage);
+        resetButton.addEventListener('click', () => { resetExperiment(); showCustomMessage('Reset', 'Experiment reset successfully.'); });
+        
+        [gtInput, grInput, fcInput, txPowerInput, environmentSelect, antennaHeightSlider, calculationModeSelect].forEach(input => {
+            input.addEventListener(input.type === 'range' ? 'input' : 'change', () => {
+                if (input.id === 'antenna-height') updateAntennaVisuals(input.value);
+                if (input.id === 'environment') updateEnvironmentVisuals(input.value);
+                updateSimulationInfo(); 
+                if (isGraphGenerated) plotChart();
+            });
+        });
+        
+        let iMX, iMY, iML, iMT;
+        const dS = (x, y) => { isDragging=true; mobileDevice.classList.add('dragging'); iMX=x; iMY=y; iML=mobileDevice.offsetLeft; iMT=mobileDevice.offsetTop; };
+        const dM = (x, y) => { if (!isDragging) return; currentMobileLeftPx=iML+x-iMX; currentMobileTopPx=iMT+y-iMY; updateMobilePositionVisual(); };
+        const dE = () => { isDragging=false; mobileDevice.classList.remove('dragging'); };
+        mobileDevice.addEventListener('mousedown', e => dS(e.clientX, e.clientY));
+        document.addEventListener('mousemove', e => { if(isDragging) { e.preventDefault(); dM(e.clientX, e.clientY); } });
+        document.addEventListener('mouseup', dE);
+        mobileDevice.addEventListener('touchstart', e => { e.preventDefault(); dS(e.touches[0].clientX, e.touches[0].clientY); });
+        document.addEventListener('touchmove', e => { e.preventDefault(); dM(e.touches[0].clientX, e.touches[0].clientY); });
+        document.addEventListener('touchend', dE);
+
+        document.getElementById('move-minus-10m').addEventListener('click', () => { currentMobileLeftPx -= 40; updateMobilePositionVisual(); });
+        document.getElementById('move-plus-10m').addEventListener('click', () => { currentMobileLeftPx += 40; updateMobilePositionVisual(); });
+        
+        takeReadingButton.addEventListener('click', () => {
+            if (readings.length === 0) {
+                environmentSelect.disabled = true;
+                showCustomMessage('Environment Locked', 'The Environment is now locked. Other parameters remain adjustable.');
+            }
+            if (readings.length >= MAX_READINGS) {
+                showCustomMessage('Info', `Maximum ${MAX_READINGS} readings reached. Press 'Finish'.`);
+                return;
+            }
+            const dist = parseFloat(currentDistanceSpan.textContent);
+            if (readings.some(r => r.distance.toFixed(1) === dist.toFixed(1))) { 
+                showCustomMessage('Info', 'A reading at this distance already exists.'); 
+                return; 
+            }
+            
+            const envParams = ENVIRONMENT_PARAMS[environmentSelect.value];
+            const useShadowing = calculationModeSelect.value === 'with-shadowing';
+            const { rxPower, pathLoss } = calculatePowerAndPathLoss(
+                dist, 
+                +gtInput.value, 
+                +grInput.value, 
+                +fcInput.value, 
+                +txPowerInput.value, 
+                envParams.n, 
+                envParams.sigma, 
+                useShadowing
+            );
+
+            readings.push({ distance: dist, rxPower: rxPower, pathLoss: pathLoss });
+            updateReadingsTable(); 
+            
+            plotChart(); 
+
+            if (readings.length === MAX_READINGS) {
+                finishReadingsButton.disabled = false;
+                showCustomMessage('Info', 'Maximum 20 readings reached. You can now press "Finish".');
+            } else {
+                finishReadingsButton.disabled = true; 
+            }
+        });
+        
+        // **** MODIFIED: finishReadingsButton LISTENER ****
+        finishReadingsButton.addEventListener('click', () => {
+            showCustomMessage('Experiment Phase', 'Readings finished. Now you can calculate n and sigma.');
+            
+            // Disable reading inputs
+            takeReadingButton.disabled = true;
+            document.getElementById('move-minus-10m').disabled = true; 
+            document.getElementById('move-plus-10m').disabled = true;
+            
+            // Enable the *start* of the calculation flow
+            checkButton.disabled = false;
+            
+            // Disable the *end* of the calculation flow
+            submitButton.disabled = true;
+            generateGraphButton.disabled = true; // This is the user's request
+            reportButton.disabled = true;
+
+            // Clear any previous check results
+            checkResultDiv.innerHTML = '';
+            
+            // Reset calculated values
+            calculated_n = null;
+            calculated_sigma = null;
+        });
+        
+        checkButton.addEventListener('click', () => {
+            const enteredN = parseFloat(npInput.value), enteredS = parseFloat(sigmaInput.value);
+            
+            if (isNaN(enteredN) || isNaN(enteredS)) { 
+                showCustomMessage('Error', 'Please enter valid numbers to check.'); 
+                submitButton.disabled = true; 
+                checkResultDiv.innerHTML = ''; 
+                calculated_n = null; calculated_sigma = null; 
+                return; 
+            }
+            
+            const pld0 = 20 * Math.log10(4 * Math.PI * REFERENCE_DISTANCE_M / (3e8 / (+fcInput.value * 1e9)));
+            let sx=0,sy=0,sxy=0,sx2=0, N=readings.length;
+            let pathLossReadings = [];
+            
+            readings.forEach(r => { 
+                const x = 10 * Math.log10(Math.max(r.distance, REFERENCE_DISTANCE_M) / REFERENCE_DISTANCE_M);
+                const y = r.pathLoss - pld0; 
+                
+                if (!isNaN(x) && !isNaN(y)) {
+                    sx += x;
+                    sy += y;
+                    sxy += x * y;
+                    sx2 += x * x;
+                    pathLossReadings.push({x: x, y: y});
+                }
+            });
+            N = pathLossReadings.length;
+            
+            if (N < 2) {
+                 showCustomMessage('Error', 'Not enough valid readings to calculate n and sigma.');
+                 return;
+            }
+
+            calculated_n = (N*sxy - sx*sy) / (N*sx2 - sx*sx); 
+            if (isNaN(calculated_n) || !isFinite(calculated_n)) calculated_n = 0;
+
+            let sse=0;
+            pathLossReadings.forEach(r => { 
+                const predicted_y = calculated_n * r.x;
+                sse += (r.y - predicted_y) ** 2;
+            });
+            calculated_sigma = Math.sqrt(sse / (N - 1));
+            if (isNaN(calculated_sigma)) calculated_sigma = 0;
+
+            let resultText = '';
+            
+            if (Math.abs(enteredN - calculated_n) < 0.25 && Math.abs(enteredS - calculated_sigma) < 0.5) {
+                resultText = `Your values are correct!<br>You can now submit.`;
+                checkResultDiv.className = 'mt-2 text-sm font-semibold text-green-600'; 
+            } else {
+                resultText = `Values do not match.<br>You can still submit your values.`;
+                checkResultDiv.className = 'mt-2 text-sm font-semibold text-red-600'; 
+            }
+            
+            checkResultDiv.innerHTML = `
+                ${resultText}<br>
+                --------------------<br>
+                Your Values: n=<b>${enteredN.toFixed(2)}</b>, σ=<b>${enteredS.toFixed(2)}</b><br>
+                Calculated: n=<b>${calculated_n.toFixed(2)}</b>, σ=<b>${calculated_sigma.toFixed(2)}</b>
+            `;
+            
+            submitButton.disabled = false; 
+        });
+        
+        submitButton.addEventListener('click', () => {
+            showCustomMessage('Values Submitted', 'Your values for n and Sigma have been submitted. You can now generate the graph.');
+            generateGraphButton.disabled = false; 
+            submitButton.disabled = true;
+            checkButton.disabled = true;
+        });
+        
+        generateGraphButton.addEventListener('click', () => { 
+            isGraphGenerated = true; 
+            plotChart(); 
+            showCustomMessage('Graph Generated', 'The final results graph is now displayed. You can now generate the report.'); 
+            reportButton.disabled = false; 
+        });
+
+        reportButton.addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
+            const reportContainer = document.getElementById('report-container');
+            
+            const now = new Date();
+            document.getElementById('pdf-date').textContent = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+            document.getElementById('pdf-time').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            document.getElementById('pdf-name').textContent = userName || 'N/A';
+            document.getElementById('pdf-sig-name').textContent = userName || 'N/A';
+            
+            const envText = environmentSelect.options[environmentSelect.selectedIndex].text.toUpperCase();
+            document.getElementById('pdf-env-title').textContent = envText;
+
+            const tableBody = document.getElementById('pdf-data-table-body');
+            tableBody.innerHTML = ''; 
+            readings.forEach(r => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${r.rxPower.toFixed(2)}</td><td>${r.distance.toFixed(1)}</td>`;
+                tableBody.appendChild(row);
+            });
+            const emptyRowsToAdd = 17 - readings.length; 
+            for(let i=0; i < emptyRowsToAdd; i++) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>&nbsp;</td><td>&nbsp;</td>`;
+                tableBody.appendChild(row);
+            }
+
+            document.getElementById('pdf-n-entered').textContent = parseFloat(npInput.value).toFixed(2) || 'N/A';
+            document.getElementById('pdf-n-actual').textContent = calculated_n !== null ? calculated_n.toFixed(2) : 'N/A';
+            document.getElementById('pdf-sigma-entered').textContent = parseFloat(sigmaInput.value).toFixed(2) || 'N/A';
+            document.getElementById('pdf-sigma-actual').textContent = calculated_n !== null ? calculated_sigma.toFixed(2) : 'N/A';
+            
+            const graphImg = document.getElementById('pdf-graph-img');
+            if (chartInstance) {
+                graphImg.src = chartInstance.toBase64Image('png', 1.0);
+            } else {
+                graphImg.src = ''; 
+            }
+
+            reportContainer.style.display = 'block';
+            
+            html2canvas(reportContainer, {
+                scale: 2, 
+                useCORS: true,
+                logging: false,
+                windowWidth: reportContainer.scrollWidth,
+                windowHeight: reportContainer.scrollHeight
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                
+                const pdf = new jsPDF('p', 'pt', 'letter');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
+                
+                const fileName = `Pathloss_Report_${userName.replace(/\s+/g, '_') || 'Guest'}_${new Date().toISOString().slice(0,10)}.pdf`;
+                pdf.save(fileName);
+
+                reportContainer.style.display = 'none';
+                reportSuccessModal.classList.remove('hidden');
+
+            }).catch(err => {
+                console.error("Error generating PDF:", err);
+                reportContainer.style.display = 'none'; 
+                showCustomMessage('Error', 'Could not generate PDF report. See console for details.');
+            });
+        });
+
+        reportSuccessOkButton.addEventListener('click', () => {
+            reportSuccessModal.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
