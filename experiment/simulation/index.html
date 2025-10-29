@@ -38,11 +38,11 @@
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background-color: #ffffff; padding: 2rem; border-radius: 1rem; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); text-align: center; max-width: 400px; width: 90%; }
         .simulation-area { width: 100%; height: 450px; background-color: #a7d9f2; border-radius: 0.75rem; position: relative; overflow: hidden; margin-bottom: 1rem; transition: background-image 0.5s ease-in-out; }
-        .base-station { position: absolute; bottom: 0; left: 5%; width: 80px; height: 180px; background-image: url('tower.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center bottom; z-index: 10; transition: height 0.3s ease-out; }
+        .base-station { position: absolute; bottom: 0; left: 5%; width: 80px; height: 180px; background-image: url('images/tower.png'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center bottom; z-index: 10; transition: height 0.3s ease-out; }
         .signal-waves { position: absolute; top: 9%; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; z-index: 11; }
         .signal-wave-circle { position: absolute; top: 50%; left: 50%; box-sizing: border-box; border: 2px solid #27ae60; border-radius: 50%; opacity: 0; animation: pulse 2.5s infinite ease-out; }
         @keyframes pulse { 0% { transform: translate(-50%, -50%) scale(0.1); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(15); opacity: 0; } }
-        .mobile-device { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); width: 50px; height: 80px; background-image: url('mobile.png'); background-size: contain; background-repeat: no-repeat; background-position: center; cursor: grab; z-index: 20; }
+        .mobile-device { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); width: 50px; height: 80px; background-image: url('images/mobile.png'); background-size: contain; background-repeat: no-repeat; background-position: center; cursor: grab; z-index: 20; }
         .mobile-device.dragging { cursor: grabbing; }
         .simulation-info { position: absolute; top: 10px; right: 10px; background-color: rgba(255, 255, 255, 0.8); padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.9rem; color: #333; z-index: 30; }
         .simulation-controls { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
@@ -122,7 +122,7 @@
                 <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
                     
                 </div>
-                <h1 class="text-xl font-bold">Path Loss and Shadowing</h1>
+                <h1 class="text-xl font-bold"></h1>
             </div>
             
         </header>
@@ -309,7 +309,7 @@
             for (let i = 0; i < 3; i++) { const w = document.createElement('div'); w.className = 'signal-wave-circle'; w.style.animationDelay = `${i * 0.6}s`; c.appendChild(w); }
         };
         const updateEnvironmentVisuals = (env) => {
-            const urls = { 'urban-macro': 'umac.png', 'urban-micro': 'm.jpg', 'rural': 'bg.png' };
+            const urls = { 'urban-macro': 'images/umac.png', 'urban-micro': 'images/m.jpg', 'rural': 'images/bg.png' };
             simulationArea.style.backgroundImage = `url('${urls[env] || ''}')`;
             simulationArea.style.backgroundSize = 'cover'; simulationArea.style.backgroundPosition = 'center';
         };
