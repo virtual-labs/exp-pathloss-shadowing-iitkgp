@@ -8,6 +8,9 @@ $$\frac{1}{N} \sum_{i=1}^{N} P_r(d_i) = \bar{P_r(d)}$$
     <img src="images/theory1.png" alt="Large Scale Fading">  
       </div>
 
+where \(\bar{P}_r(d)\) is predicted using the appropriate( value of \(n_p\)) path loss model.
+
+where \(\bar{P}_r(d)\) is predicted using the appropriate value of \(n_p\) path loss model.
 
 Where $\bar{P_r(d)}$ is predicted using the appropriate( value of $n_p$) path loss model.
 
