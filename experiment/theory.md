@@ -8,13 +8,7 @@ $$\frac{1}{N} \sum_{i=1}^{N} P_r(d_i) = \bar{P_r(d)}$$
     <img src="images/theory1.png" alt="Large Scale Fading">  
       </div>
 
-$ \text{Where} \quad \bar{P_r(d)} \quad \text{is predicted using the appropriate(value of} \quad n_p \quad \text{) path loss model.}$
-
-$$ \text{Where} \quad \bar{P_r(d)} \quad \text{is predicted using the appropriate(value of} \quad n_p \quad \text{) path loss model.}$$
-
-Where \(\overline{P_r(d)}\) is predicted using the appropriate( value of \(n_p\)) path loss model.
-
-Where $\bar{P_r(d)}$ is predicted using the appropriate( value of $n_p$) path loss model.
+$$ \text{Where} \quad \bar{P_r(d)} \quad \text{is predicted using the appropriate(value of} \quad n_p )\quad \text{path loss model.}$$
 
 In fact $n_p$ is determined using curve fitting. Since the local mean is a random value the effect is captured through the shadowing process. Hence the earlier P.L. formula is extended to take into consideration the local mean variation.
 
@@ -24,13 +18,13 @@ $$PL(d) = \bar{PL(d_0)} + 10n_p\log_{10}(d/d_0) + X_{\sigma}$$
 
 Where,
 
-$X_{\sigma}$ is a random variable.
+Xσ is a random variable.
 
-The random variable $X_{\sigma}$ is modeled as log normal with zero mean and variable $\sigma_x$. This is as observed in several measurements values of $\sigma_x$ lies between 4 and 12 dB. In macro cells is typically 3dB. In microcells it is typically 6-8 dB.
+The random variable Xσ is modeled as log normal with zero mean and variable σx. This is as observed in several measurements values of σx lies between 4 and 12 dB. In macro cells is typically 3dB. In microcells it is typically 6-8 dB.
 
 The log normal process is used in simulations, as well as in analytical evaluations.
 
-### 1.1 Example for calculating n and $\sigma$ :-
+### 1.1 Example for calculating n and σ :-
 
 The received power at a distance d from the transmitter can be calculated using the following formula
 
@@ -46,8 +40,7 @@ $P_r$ is the computed value.
 
 $\hat{P_r}$ is the calculated value.
 
-Follow the example below to calculate n and $\sigma$
-Suppose you have the following set of values:-
+Follow the example below to calculate n and σ Suppose you have the following set of values:-
 
 <div align="center">
     <img src="images/theory2.png" alt="Large Scale Fading">  
@@ -67,7 +60,8 @@ $$P_r(d4) = 0 - 10n\log(1000/100) = -10n$$
 
 J (n) is the sum of squared errors between measured and estimated values.
 
-Now, $J(n) = (-10 - (-3n))^2 + (-30 - (-8n))^2 + (-41 - (-9n))^2 + (-60 - (-10n))^2 = 6281 - 2478n + 254n^2$
+$$\text{Now,} J(n) = (-10 - (-3n))^2 + (-30 - (-8n))^2 + (-41 - (-9n))^2 + (-60 - (-10n))^2 = 6281 - 2478n + 254n^2$$
+
 Value of n which minimizes mean square error can be obtained by equating derivative of J (n) to 0. Now, equating the derivative of J (n) to 0.
 
 $$\frac{dJ(n)}{dn} = 0 \Rightarrow 508n - 2478 = 0 \Rightarrow n = 4.87$$
