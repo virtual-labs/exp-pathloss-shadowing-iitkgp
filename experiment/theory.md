@@ -9,6 +9,9 @@ $$\frac{1}{N} \sum_{i=1}^{N} P_r(d_i) = \bar{P_r(d)}$$
       </div>
 
 where \(\bar{P}_r(d)\) is predicted using the appropriate( value of \(n_p\)) path loss model.
+
+where \(\bar{P}_r(d)\) is predicted using the appropriate value of \(n_p\) path loss model.
+
 Where $\bar{P_r(d)}$ is predicted using the appropriate( value of $n_p$) path loss model.
 
 In fact $n_p$ is determined using curve fitting. Since the local mean is a random value the effect is captured through the shadowing process. Hence the earlier P.L. formula is extended to take into consideration the local mean variation.
