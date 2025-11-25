@@ -40,9 +40,9 @@ Step 1:-Click on the start button. A page appears with a dialogue box asking for
     <img src="images/instruction6.png" alt="Large Scale Fading">  
       </div>
       
-- Step 6:-After,clicking on button CHECK button, If your calculated value matches with the computed value then a message appears stating that your entered values are correct. If your values are not correct then the exact values of the unknown parameters are displayed just next to the boxes where you have entered your calculated values of n and sigma.
+- Step 6:-After clicking on button CHECK button, If your calculated value matches with the computed value then a message appears stating that your entered values are correct. If your values are not correct then the exact values of the unknown parameters are displayed just next to the boxes where you have entered your calculated values of n and sigma.
 
-- Step 7:-After,clicking on SUBMIT button  you have to click GENERATE GRAPH to view a plot of received power(dBm) vs distance(m).
+- Step 7:-After clicking on SUBMIT button  you have to click GENERATE GRAPH to view a plot of received power(dBm) vs distance(m).
 <div align="center">
     <img src="images/instruction7.png" alt="Large Scale Fading">  
       </div>
