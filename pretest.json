@@ -1,0 +1,117 @@
+  {
+	  "version": 2.0,
+  "questions": [
+    {
+    "question": "1. In wireless propagation, what does 'shadowing' primarily refer to?",
+    "answers": {
+      "a": "Signal loss that increases steadily with distance from the transmitter.",
+      "b": "Signal strength variations caused by large objects like hills or buildings blocking the path.",
+      "c": "Rapid signal fluctuations experienced over very short distances or time periods.",
+      "d": "Noise introduced by other electronic devices operating on the same frequency."
+    },
+    "correctAnswer": "b",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "2. The variations in signal strength due to shadowing are most commonly modeled using which statistical distribution?",
+    "answers": {
+      "a": "Rayleigh distribution",
+      "b": "Log-normal distribution",
+      "c": "Rician distribution",
+      "d": "Uniform distribution"
+    },
+    "correctAnswer": "b",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "3. What does the pathloss exponent describe in a propagation model?",
+    "answers": {
+      "a": "The fixed amount of power lost at the transmitter.",
+      "b": "The rate at which the average signal power decreases as distance increases.",
+      "c": "The degree of signal fluctuation due to multi-path interference.",
+      "d": "The specific frequency band being used for communication."
+    },
+    "correctAnswer": "b",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "4. A high value for the pathloss exponent, such as four or five, typically indicates what type of environment?",
+    "answers": {
+      "a": "An open, clear environment with no obstructions, like free space.",
+      "b": "An environment with a clear line-of-sight path and strong ground reflection.",
+      "c": "A complex urban environment with many buildings and obstructions.",
+      "d": "A pure vacuum with no atmosphere."
+    },
+    "correctAnswer": "c",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "5. What key characteristic is captured by the 'variance of shadow fading'?",
+    "answers": {
+      "a": "The average signal power received from the transmitter.",
+      "b": "The rate of signal loss as the receiver moves away from the transmitter.",
+      "c": "The spread of signal strength measurements around the average value at a fixed distance.",
+      "d": "The time duration for which the signal is completely blocked."
+    },
+    "correctAnswer": "c",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "6. A large variance in shadow fading measurements suggests that the propagation environment is...",
+    "answers": {
+      "a": "...very uniform and predictable, like an open field.",
+      "b": "...highly varied, with a diverse mix of obstacles and open spaces.",
+      "c": "...dominated by a single, strong line-of-sight path.",
+      "d": "...experiencing no signal loss from obstructions."
+    },
+    "correctAnswer": "b",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "7. Pathloss and shadowing are both considered part of which category of propagation effects?",
+    "answers": {
+      "a": "Small-scale fading",
+      "b": "Doppler shift",
+      "c": "Large-scale propagation",
+      "d": "Phase noise"
+    },
+    "correctAnswer": "c",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "8. What is the primary purpose of determining the pathloss exponent and shadow fading variance from measurements?",
+    "answers": {
+      "a": "To determine the exact speed of the mobile device.",
+      "b": "To build a statistical model that can predict average signal coverage and variability.",
+      "c": "To eliminate all signal obstructions between the transmitter and receiver.",
+      "d": "To calculate the precise data transfer rate of the system."
+    },
+    "correctAnswer": "b",
+    "difficulty": "expert"
+  },
+  {
+    "question": "9. How is the effect of shadowing distinguished from the effect of pathloss?",
+    "answers": {
+      "a": "Pathloss describes the average signal decrease with distance, while shadowing describes variations around that average.",
+      "b": "Shadowing describes the average signal decrease with distance, while pathloss describes variations around that average.",
+      "c": "Pathloss is only caused by buildings, while shadowing is only caused by hills.",
+      "d": "Pathloss and shadowing are two terms for the exact same physical phenomenon."
+    },
+    "correctAnswer": "a",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "10. To accurately determine the statistical characteristics of large-scale propagation, what is required?",
+    "answers": {
+      "a": "A single, perfect signal strength reading at one location.",
+      "b": "The brand and model of the transmitter and receiver.",
+      "c": "The exact GPS coordinates of every building in the area.",
+      "d": "Numerous signal strength measurements taken at various locations and distances."
+    },
+    "correctAnswer": "d",
+    "difficulty": "beginner"
+  }
+
+
+  ]
+}
